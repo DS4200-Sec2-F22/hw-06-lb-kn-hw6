@@ -18,7 +18,7 @@ h1, h2, h3 {
 	flex: 1;
 }
 
-/* classes to color points by species */
+/* color points by species */
 
 .setosa {
 	fill: mediumseagreen;
@@ -33,4 +33,11 @@ h1, h2, h3 {
 .virginica {
 	fill: cornflowerblue;
 	opacity: 50%;
+}
+
+/* brush selecting */
+.selected {
+	stroke: orange;
+	stroke-width: 1;
+	opacity: 100%;
 }
