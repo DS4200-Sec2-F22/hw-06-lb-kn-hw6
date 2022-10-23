@@ -135,13 +135,13 @@ function build_barchart() {
 		FRAME_RIGHT.append("g")
 					.attr("transform", "translate(" + MARGINS.left + "," + (VIS_HEIGHT + MARGINS.top) + ")")
 					.call(d3.axisBottom(X_SCALE).ticks())
-						.attr("font-size", "15px")
+						.attr("font-size", "10px")
 
 		// add y-axis
 		FRAME_RIGHT.append("g")
 					.attr("transform", "translate(" + MARGINS.left + "," + MARGINS.top + ")")
 					.call(d3.axisLeft(Y_SCALE).ticks(10))
-						.attr("font-size", "15px");
+						.attr("font-size", "10px");
 
 		// create bars for each species 
 		for (let i = 0; i < SPECIES.length; i++) {
