@@ -1,0 +1,36 @@
+body {
+	font-family: Arial;
+}
+
+h1, h2, h3 {
+	text-align: center;
+}
+
+.flex-container {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: flex-start;
+	padding: 15px;
+}
+
+.flex-item {
+	flex: 1;
+}
+
+/* classes to color points by species */
+
+.setosa {
+	fill: mediumseagreen;
+	opacity: 50%;
+}
+
+.versicolor {
+	fill: lightcoral;
+	opacity: 50%;
+}
+
+.virginica {
+	fill: cornflowerblue;
+	opacity: 50%;
+}
