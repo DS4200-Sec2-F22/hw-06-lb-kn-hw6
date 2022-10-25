@@ -92,7 +92,7 @@ function build_middle_scatter() {
 							.attr("font-size", "10px");
 
 		// add points for the data
-		FRAME_MIDDLE.selectAll("points")
+		points = FRAME_MIDDLE.selectAll("points")
 						.data(data)
 						.enter()
 						.append("circle")
@@ -101,6 +101,26 @@ function build_middle_scatter() {
 							.attr("cy", (d) => {return (MARGINS.top + Y_SCALE(d.Petal_Width));})
 							.attr("r", 4)
 							.attr("class", (d) => {return d.Species});
+
+		// brush
+		FRAME_MIDDLE.call(d3.brush()
+						.extent([[MARGINS.left,MARGINS.top], [FRAME_WIDTH,(FRAME_HEIGHT - MARGINS.bottom)]])
+						.on("start brush", highlight_charts)
+						);
+
+		//function to highlight points when brushed (should also change the other plots here?)
+		function highlight_charts(event) {
+		    const selection = event.selection;
+		    points.classed("selected", (d) => isBrushed(selection, (MARGINS.left + X_SCALE(d.Sepal_Width)), (MARGINS.top + Y_SCALE(d.Petal_Width))))
+		  }
+
+		function isBrushed(brush_coords, cx, cy) {
+	    	let x0 = brush_coords[0][0];
+	        let x1 = brush_coords[1][0];
+	        let y0 = brush_coords[0][1];
+	        let y1 = brush_coords[1][1];
+	      	return x0 <= cx && cx <= x1 && y0 <= cy && cy <= y1;
+  }
 		
 	});
 };
