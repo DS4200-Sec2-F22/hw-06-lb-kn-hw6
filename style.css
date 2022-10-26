@@ -22,22 +22,22 @@ h1, h2, h3 {
 
 .setosa {
 	fill: mediumseagreen;
-	opacity: 40%;
+	opacity: 50%;
 }
 
 .versicolor {
 	fill: lightcoral;
-	opacity: 40%;
+	opacity: 50%;
 }
 
 .virginica {
 	fill: cornflowerblue;
-	opacity: 40%;
+	opacity: 50%;
 }
 
 /* brush selecting */
 .selected {
 	stroke: orange;
-	stroke-width: 1.5;
+	stroke-width: 2;
 	opacity: 100% !important;
 }

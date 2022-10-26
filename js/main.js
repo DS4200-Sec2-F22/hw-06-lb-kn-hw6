@@ -28,46 +28,10 @@ const FRAME_RIGHT = d3.select("#right")
 							.attr("width", FRAME_WIDTH)
 							.attr("class", "frame");
 
-// builds literally everything boooooo
+
+// builds all plots  
 function build_plots() {
 	d3.csv("data/iris.csv").then((data) => {
-
-	// MIDDLE PLOT
-		// x-axis scaling
-		const MAX_VALUE_XM = d3.max(data, (d) => {return parseInt(d.Sepal_Width);})
-		const X_SCALE_M = d3.scaleLinear()
-							.domain([0, MAX_VALUE_XM + 1])
-							.range([0, VIS_HEIGHT]);
-
-		// y-axis scaling
-		const MAX_VALUE_YM = d3.max(data, (d) => {return parseInt(d.Petal_Width);})
-		const Y_SCALE_M = d3.scaleLinear()
-							.domain([0, MAX_VALUE_YM + 1])
-							.range([VIS_HEIGHT, 0]);
-
-		// add x-axis
-		FRAME_MIDDLE.append("g")
-						.attr("transform", "translate(" + MARGINS.left + "," + (VIS_HEIGHT + MARGINS.top) + ")")
-						.call(d3.axisBottom(X_SCALE_M).ticks(8))
-							.attr("font-size", "10px")
-
-		// add y-axis
-		FRAME_MIDDLE.append("g")
-						.attr("transform", "translate(" + MARGINS.left + "," + MARGINS.top + ")")
-						.call(d3.axisLeft(Y_SCALE_M).ticks(16))
-							.attr("font-size", "10px");
-
-		// add points for the data
-		middlePoints = FRAME_MIDDLE.selectAll("points")
-						.data(data)
-						.enter()
-						.append("circle")
-							.attr("id", (d) => {return d.id;})
-							.attr("cx", (d) => {return (MARGINS.left + X_SCALE_M(d.Sepal_Width));})
-							.attr("cy", (d) => {return (MARGINS.top + Y_SCALE_M(d.Petal_Width));})
-							.attr("r", 4)
-							.attr("class", (d) => {return "point " + d.Species});
-
 
 	// LEFT PLOT
 		// x-axis scaling
@@ -86,7 +50,7 @@ function build_plots() {
 		FRAME_LEFT.append("g")
 					.attr("transform", "translate(" + MARGINS.left + "," + (VIS_HEIGHT + MARGINS.top) + ")")
 					.call(d3.axisBottom(X_SCALE_L).ticks(8))
-						.attr("font-size", "10px")
+						.attr("font-size", "10px");
 
 		// add y-axis
 		FRAME_LEFT.append("g")
@@ -96,14 +60,51 @@ function build_plots() {
 
 		// add points for the data
 		leftPoints = FRAME_LEFT.selectAll("points")
-					.data(data)
-					.enter()
-					.append("circle")
-						.attr("id", (d) => {return d.id;})
-						.attr("cx", (d) => {return (MARGINS.left + X_SCALE_L(d.Sepal_Length));})
-						.attr("cy", (d) => {return (MARGINS.top + Y_SCALE_L(d.Petal_Length));})
-						.attr("r", 4)
-						.attr("class", (d) => {return "point " + d.Species});
+									.data(data)
+									.enter()
+									.append("circle")
+										.attr("id", (d) => {return d.id;})
+										.attr("cx", (d) => {return (MARGINS.left + X_SCALE_L(d.Sepal_Length));})
+										.attr("cy", (d) => {return (MARGINS.top + Y_SCALE_L(d.Petal_Length));})
+										.attr("r", 4)
+										.attr("class", (d) => {return "point " + d.Species});
+
+
+	// MIDDLE PLOT
+		// x-axis scaling
+		const MAX_VALUE_XM = d3.max(data, (d) => {return parseInt(d.Sepal_Width);})
+		const X_SCALE_M = d3.scaleLinear()
+							.domain([0, MAX_VALUE_XM + 1])
+							.range([0, VIS_HEIGHT]);
+
+		// y-axis scaling
+		const MAX_VALUE_YM = d3.max(data, (d) => {return parseInt(d.Petal_Width);})
+		const Y_SCALE_M = d3.scaleLinear()
+							.domain([0, MAX_VALUE_YM + 1])
+							.range([VIS_HEIGHT, 0]);
+
+		// add x-axis
+		FRAME_MIDDLE.append("g")
+						.attr("transform", "translate(" + MARGINS.left + "," + (VIS_HEIGHT + MARGINS.top) + ")")
+						.call(d3.axisBottom(X_SCALE_M).ticks(8))
+							.attr("font-size", "10px");
+
+		// add y-axis
+		FRAME_MIDDLE.append("g")
+						.attr("transform", "translate(" + MARGINS.left + "," + MARGINS.top + ")")
+						.call(d3.axisLeft(Y_SCALE_M).ticks(16))
+							.attr("font-size", "10px");
+
+		// add points for the data
+		middlePoints = FRAME_MIDDLE.selectAll("points")
+										.data(data)
+										.enter()
+										.append("circle")
+											.attr("id", (d) => {return d.id;})
+											.attr("cx", (d) => {return (MARGINS.left + X_SCALE_M(d.Sepal_Width));})
+											.attr("cy", (d) => {return (MARGINS.top + Y_SCALE_M(d.Petal_Width));})
+											.attr("r", 4)
+											.attr("class", (d) => {return "point " + d.Species});
 
 
 	// RIGHT PLOT (bar chart)
@@ -124,7 +125,7 @@ function build_plots() {
 		FRAME_RIGHT.append("g")
 					.attr("transform", "translate(" + MARGINS.left + "," + (VIS_HEIGHT + MARGINS.top) + ")")
 					.call(d3.axisBottom(X_SCALE_R).tickFormat((i) => {return BAR_DATA[i].Species}))
-						.attr("font-size", "10px")
+						.attr("font-size", "10px");
 
 		// add y-axis
 		FRAME_RIGHT.append("g")
@@ -145,18 +146,19 @@ function build_plots() {
 
 
 	// BRUSH
-		// brush
+		// initialize brush and event handler
 		FRAME_MIDDLE.call(d3.brush()
 						.extent([[MARGINS.left,MARGINS.top], [FRAME_WIDTH,(FRAME_HEIGHT - MARGINS.bottom)]])
 						.on("brush end", highlight_charts));
 
 
-		//function to highlight points when brushed (should also change the other plots here?)
+		//function to highlight points/bars when brushed in middle plot
 		function highlight_charts(event) {
+
 			// coordinates of the selected region
 		    const selection = event.selection;
 
-		    // emppty set to store selected species names
+		    // empty set to store selected species names
 		    let selectedSpecies = new Set();
 
 		    // clears when brush restarts
@@ -164,36 +166,23 @@ function build_plots() {
 		    	middlePoints.classed('selected', false);
 		    	leftPoints.classed('selected', false);
 		    } 
-		    // gives the border/opacity and gives the species class to the set
+		    // gives the border/opacity for all plots
 		    else {
-		    	/*middlePoints.classed("selected", (d) => 
-		    		isSelected = isBrushed(selection, (MARGINS.left + X_SCALE_M(d.Sepal_Width)), (MARGINS.top + Y_SCALE_M(d.Petal_Width))));
-		    		if (isSelected) { (d) => 
+		    	// selected class for middle plot, also adds class to set for bar plots
+		    	middlePoints.classed("selected", (d) => {
+		    		isSelected = isBrushed(selection, (MARGINS.left + X_SCALE_M(d.Sepal_Width)), (MARGINS.top + Y_SCALE_M(d.Petal_Width)));
+		    		if (isSelected) {
 		    			selectedSpecies.add(d.Species);
 		    		}
-		    		return isSelected;
+		    		return isSelected});
 
-					console.log(selectedSpecies);*/
-
-				middlePoints.classed("selected", (d) => isBrushed(selection, (MARGINS.left + X_SCALE_M(d.Sepal_Width)), (MARGINS.top + Y_SCALE_M(d.Petal_Width))));
+		    	// highlights corresponding points in the left plot
 				leftPoints.classed("selected", (d) => isBrushed(selection, (MARGINS.left + X_SCALE_M(d.Sepal_Width)), (MARGINS.top + Y_SCALE_M(d.Petal_Width))));
-
-
-
-				console.log(middlePoints.select(".selected"));
-
-				for (var i = 0; i < middlePoints.length; i++) {
-					if (middlePoints[i].classed(".selected")) {
-						selectedSpecies.add(middlePoints[i].Species)
-					}
-				}
-		    }
-
-		    //console.log(middlePoints.selectAll(".selected"));
-
-			//console.log(selectedSpecies);
-
-		}
+		    	
+				// highlights bars based on class being in the selectedSpecies set
+		    	bars.classed("selected", (d) => {return selectedSpecies.has(d.Species);})
+		    };
+		};
 
 		// returns if a point is in the brush selection
 		function isBrushed(brush_coords, cx, cy) {
@@ -202,8 +191,8 @@ function build_plots() {
 	        let y0 = brush_coords[0][1];
 	        let y1 = brush_coords[1][1];
 	      	return x0 <= cx && cx <= x1 && y0 <= cy && cy <= y1;
-  		}
-	})
-}
+  		};
+	});
+};
 build_plots();
 
