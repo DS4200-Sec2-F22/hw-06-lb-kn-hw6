@@ -161,10 +161,11 @@ function build_plots() {
 		    // empty set to store selected species names
 		    let selectedSpecies = new Set();
 
-		    // clears when brush restarts
+		    // clears highlights when brush restarts
 		    if (selection === null) {
 		    	middlePoints.classed('selected', false);
 		    	leftPoints.classed('selected', false);
+		    	bars.classed("selected", false);
 		    } 
 		    // gives the border/opacity for all plots
 		    else {
